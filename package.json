@@ -14,5 +14,20 @@
     "fixed-data-table": "^0.6.0",
     "react": "^0.14.8",
     "react-dom": "^0.14.8"
-  }
+  },
+  "devDependencies": {
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.3.0",
+    "fixed-data-table": "^0.6.0",
+    "react": "^0.14.8",
+    "react-dom": "^0.14.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Esaron/react-scratch.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Esaron/react-scratch/issues"
+  },
+  "homepage": "https://github.com/Esaron/react-scratch#readme"
 }

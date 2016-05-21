@@ -5,3 +5,7 @@ npm:
 
 browserify:
     npm install -g browserify
+
+Hints:
+    To run in a simple web server, you can use 'python -m SimpleHTTPServer <port>'
+    and navigate to localhost:<port>
