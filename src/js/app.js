@@ -1,6 +1,6 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var {Table, Column, Cell} = require('fixed-data-table');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const {Table, Column, Cell} = require('fixed-data-table');
 
 // Table data as a list of array.
 const rows = [
