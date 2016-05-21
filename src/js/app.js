@@ -6,6 +6,57 @@ var {Table, Column, Cell} = require('fixed-data-table');
 const rows = [
   ['a1', 'b1', 'c1'],
   ['a2', 'b2', 'c2'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
+  ['a3', 'b3', 'c3'],
   ['a3', 'b3', 'c3']
   // .... and more
 ];
@@ -15,11 +66,12 @@ var headerHeight = 40;
 var rowHeight = 30;
 // -16 for page margins because reasons
 var tableWidth = window.innerWidth - 16;
-var rowWidth = tableWidth/rows.length;
+var rowWidth = tableWidth/rows[0].length;
 // +2 px for fdt margin also because reasons
 var tableHeight = rows.length * rowHeight + headerHeight + 2;
-if (tableHeight > window.innerHeight) {
-    tableHeight = window.innerHeight;
+var maxHeight = window.innerHeight - 16;
+if (tableHeight > maxHeight) {
+    tableHeight = maxHeight;
 }
 ReactDOM.render(
   <Table
