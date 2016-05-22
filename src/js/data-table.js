@@ -105,17 +105,20 @@ var DataTable = React.createClass({
         // TODO
         // support custom fields in the description
         t._columns = [];
-        var columnFormat;
+        var content;
         Object.keys(t.props.columnFormats).forEach(function(columnId) {
-            columnFormat = t.props.columnFormats[columnId];
             t._columns.push(
                 <Column
                     key={columnId}
-                    header={<Cell>{columnFormat.label}</Cell>}
+                    header={<Cell>{t.props.columnFormats[columnId].label}</Cell>}
                     cell={function(cellData) {
+                        content = t.state.data[cellData.rowIndex][columnId];
+                        if (!!t.props.columnFormats[columnId].editable) {
+                            content = <input type="text" id={columnId + cellData.rowIndex} defaultValue={content} />;
+                        }
                         return (
-                            <Cell className={columnFormat.cellClass}>
-                                {t.state.data[cellData.rowIndex][columnId]}
+                            <Cell className={t.props.columnFormats[columnId].cellClass}>
+                                {content}
                             </Cell>
                         );
                     }}

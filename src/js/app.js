@@ -12,7 +12,8 @@ const columns = {
         label: "Title"
     },
     email: {
-        label: "Email"
+        label: "Email",
+        editable: true
     }
 };
 
