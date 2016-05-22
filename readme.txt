@@ -1,3 +1,5 @@
+data-table.js: A stateful wrapper for fixed-data-table (http://facebook.github.io/fixed-data-table/) that allows for dynamic retrieval and submission of data via REST, data editing, and server-side operations such as sorting and filtering.
+
 This project requires:
 
 npm:
