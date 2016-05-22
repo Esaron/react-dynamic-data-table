@@ -1,8 +1,14 @@
 /**
  *  Created by esaron on 5/21/16.
  *
+ *  data-table.js - This is a stateful table that is capable of displaying data and responding to user input to
+ *                  dynamically update and submit data.
+ *
  *  Internal Fields (Not for external manipulation)
+ *      _data:              Used as a pre-mount data store.
  *      _columns:           Used for tracking dynamically constructed Columns (column config with nested row data).
+ *      _showRefreshButton: True if loading data from props.restUrl. Signals that a button is to be rendered to allow
+ *                              the user to manually trigger a refresh.
  *
  *  props
  *      Props will be passed to wrapped instance of fixed-data-table
@@ -57,6 +63,7 @@
  *                              }
  */
 
+const $ = require('jquery');
 const React = require('react');
 const PropTypes = React.PropTypes;
 const {Table, Column, Cell} = require('fixed-data-table');
@@ -64,6 +71,8 @@ const Button = require('./button.js')
 
 var DataTable = React.createClass({
     _columns: [],
+
+    _showRefreshButton: false,
 
     getInitialState: function() {
         var state = {
@@ -74,7 +83,13 @@ var DataTable = React.createClass({
             filters: {}
         };
         if (!!this.props.restUrl) {
-            this.refreshButton = <Button text={'Refresh'} onClick={this.refresh()} />;
+            if (!!this.props.initialData) {
+                // Log a warning. Initial data is ignored if we have a restUrl.
+                console.error("Both restUrl and initialData have been provided to data-table. The value for initialData" +
+                    " is being ignored.");
+                this.props.initialData = [];
+            }
+            this._showRefreshButton = true;
             state.data = this.loadData();
         }
         return state;
@@ -96,8 +111,31 @@ var DataTable = React.createClass({
     },
 
     loadData: function() {
-        // TODO
-        // data = ajax call to retrieve data from this.restUrl
+        var t = this;
+        if (t.props.restUrl === "debug") {
+            t._data = [{
+                    name: "John Doe",
+                    title: "CEO",
+                    email: Math.random()
+                }, {
+                    name: "Dean Winchester",
+                    title: "Hunter",
+                    email: Math.random()
+                }, {
+                    name: "Buffy Summers",
+                    title: "Slayer",
+                    email: Math.random()
+            }];
+        }
+        else {
+            $.get(t.props.restUrl, function (data) {
+                t._data = data;
+            }).fail(function (err) {
+                // TODO
+                // user feedback within table header/footer
+                console.error("Failed to load data from '" + t.props.restUrl + "': " + err);
+            });
+        }
     },
 
     constructColumns: function() {
@@ -114,7 +152,14 @@ var DataTable = React.createClass({
                     cell={function(cellData) {
                         content = t.state.data[cellData.rowIndex][columnId];
                         if (!!t.props.columnFormats[columnId].editable) {
-                            content = <input type="text" id={columnId + cellData.rowIndex} defaultValue={content} />;
+                            content = <input
+                                        type="text"
+                                        id={columnId + cellData.rowIndex}
+                                        value={content}
+                                        onChange={function(event) {
+                                            this.setState({value: event.target.value});
+                                        }
+                            } />;
                         }
                         return (
                             <Cell className={t.props.columnFormats[columnId].cellClass}>
@@ -131,11 +176,14 @@ var DataTable = React.createClass({
 
     refresh: function() {
         this.loadData();
+        this.setState({
+            data: this._data
+        });
         this.constructColumns();
     },
 
     componentWillMount: function() {
-        this.constructColumns();
+        this.refresh();
     },
 
     componentDidMount: function() {
@@ -147,7 +195,7 @@ var DataTable = React.createClass({
     },
 
     shouldComponentUpdate: function() {
-
+        return true;
     },
 
     componentWillUpdate: function() {
@@ -163,12 +211,16 @@ var DataTable = React.createClass({
     },
 
     render: function() {
+        var refreshButton;
+        if (this._showRefreshButton) {
+            refreshButton = <Button text={'Refresh'} onClick={this.refresh} />;
+        }
         return (
             <div className="dataTable">
                 <Table {...this.props}>
                     {this._columns}
                 </Table>
-                {this.refreshButton}
+                {refreshButton}
             </div>
         );
     }

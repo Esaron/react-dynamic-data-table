@@ -54,6 +54,7 @@ var table = (
         headerHeight={headerHeight}
         columnFormats={columns}
         initialData={rows}
+        restUrl="debug"
     />
 );
 

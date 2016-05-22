@@ -5,11 +5,15 @@
 var React = require('react');
 
 var Button = React.createClass({
+    getInitialState: function() {
+        return {};
+    },
+
     render: function() {
         return (
-            <div className={this.state.className}>
-                {this.state.text}
-            </div>
+            <button type="button" className={this.props.className} onClick={this.props.onClick}>
+                {this.props.text}
+            </button>
         );
     }
 });

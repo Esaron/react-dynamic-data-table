@@ -6,15 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "mkdir build; browserify -t [ babelify --presets [ react ] ] src/js/app.js -o build/app.js;",
-    "resolve": "npm install --save react@0.14.8 react-dom@0.14.8 babelify babel-preset-react fixed-data-table"
+    "resolve": "npm install --save react@0.14.8 react-dom@0.14.8 babelify babel-preset-react fixed-data-table jquery"
   },
   "author": "esaron",
   "license": "ISC",
   "dependencies": {
     "babel-preset-react": "^6.5.0",
-    "babel-preset-stage-2": "^6.5.0",
     "babelify": "^7.3.0",
     "fixed-data-table": "^0.6.0",
+    "jquery": "^2.2.4",
     "react": "^0.14.8",
     "react-dom": "^0.14.8"
   },
@@ -22,6 +22,7 @@
     "babel-preset-react": "^6.5.0",
     "babelify": "^7.3.0",
     "fixed-data-table": "^0.6.0",
+    "jquery": "^2.2.4",
     "react": "^0.14.8",
     "react-dom": "^0.14.8"
   },
