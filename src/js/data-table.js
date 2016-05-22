@@ -26,7 +26,7 @@
  *                                  ...
  *                              }
  *
- *      initialRowsPerPage: The number of rows to display per page if using pagination (Default: 10)
+ *      initialRowsPerPage: The number of rows to display per page if using pagination (Default: -1)
  *
  *  state
  *      data:               The data to display, formatted as an array of row objects:
@@ -91,7 +91,8 @@ var DataTable = React.createClass({
     propTypes: {
         initialData: PropTypes.arrayOf(PropTypes.object),
         restUrl: PropTypes.string,
-        columnFormats: PropTypes.objectOf(PropTypes.object).isRequired
+        columnFormats: PropTypes.objectOf(PropTypes.object).isRequired,
+        initialRowsPerPage: PropTypes.number
     },
 
     loadData: function() {
