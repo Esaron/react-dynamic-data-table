@@ -3,7 +3,7 @@ const ReactDOM = require('react-dom');
 const {Table, Column, Cell} = require('fixed-data-table');
 const DataTable = require('./data-table.js');
 
-// Column config as an array of column objects
+// Column config as an object of column ids to column format objects
 const columns = {
     name: {
         label: "Name"
