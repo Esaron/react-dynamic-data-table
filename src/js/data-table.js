@@ -7,8 +7,6 @@
  *  Internal Fields (Not for external manipulation)
  *      _data:              Used as a pre-mount data store.
  *      _columns:           Used for tracking dynamically constructed Columns (column config with nested row data).
- *      _showRefreshButton: True if loading data from props.restUrl. Signals that a button is to be rendered to allow
- *                              the user to manually trigger a refresh.
  *
  *  props
  *      Props will be passed to wrapped instance of fixed-data-table
@@ -32,7 +30,9 @@
  *                                  ...
  *                              }
  *
- *      initialRowsPerPage: The number of rows to display per page if using pagination (Default: -1)
+ *      initialRowsPerPage: The number of rows per page. If -1, scrolling is used instead of pagination. (Default: -1)
+ *
+ *      initialPage:        The page to start on. (Default: 1)
  *
  *  state
  *      data:               The data to display, formatted as an array of row objects:
@@ -44,14 +44,17 @@
  *                                  ...
  *                              }]
  *
- *      rowsPerPage:        The number of rows per page. If set to -1, infinite scrolling is used instead of pagination.
- *                              (Default -1)
+ *      rowsPerPage:        The number of rows per page. If set to -1, scrolling is used instead of pagination.
+ *                              (Default -1) TODO input to change dynamically
  *
- *      pageNumber:
+ *      pageNumber:         The current page number. Only used if rowsPerPage > 0. (Default: 1)
+ *                              TODO input to change dynamically
  *
  *      sortField:          If set, sort by this field.
+ *                              TODO allow for an array for sorting on additional columns when fields match
  *
  *      sortDir:            'asc' or 'desc'. (Default 'asc')
+ *                              TODO onClick handling for headers, class for sort icon
  *
  *      filters:            An object of columnId to objects containing current filter settings:
  *                              {
@@ -61,6 +64,7 @@
  *                                  },
  *                                  ...
  *                              }
+ *                              TODO
  */
 
 const $ = require('jquery');
@@ -72,24 +76,21 @@ const Button = require('./button.js')
 var DataTable = React.createClass({
     _columns: [],
 
-    _showRefreshButton: false,
-
     getInitialState: function() {
         var state = {
             data: this.props.initialData,
             rowsPerPage: this.props.initialRowsPerPage,
-            pageNumber: 1,
+            pageNumber: this.props.initialPage,
             sortDir: 'asc',
             filters: {}
         };
         if (!!this.props.restUrl) {
             if (!!this.props.initialData) {
                 // Log a warning. Initial data is ignored if we have a restUrl.
-                console.error("Both restUrl and initialData have been provided to data-table. The value for initialData" +
-                    " is being ignored.");
+                console.error("Both restUrl and initialData have been provided to data-table. The value for " +
+                    "initialData is being ignored.");
                 this.props.initialData = [];
             }
-            this._showRefreshButton = true;
             state.data = this.loadData();
         }
         return state;
@@ -98,7 +99,6 @@ var DataTable = React.createClass({
     getDefaultProps: function() {
         return {
             initialData: [],
-            restUrl: null,
             initialRowsPerPage: -1
         };
     },
@@ -107,7 +107,8 @@ var DataTable = React.createClass({
         initialData: PropTypes.arrayOf(PropTypes.object),
         restUrl: PropTypes.string,
         columnFormats: PropTypes.objectOf(PropTypes.object).isRequired,
-        initialRowsPerPage: PropTypes.number
+        initialRowsPerPage: PropTypes.number,
+        initialPage: PropTypes.number
     },
 
     loadData: function() {
@@ -131,8 +132,7 @@ var DataTable = React.createClass({
             $.get(t.props.restUrl, function (data) {
                 t._data = data;
             }).fail(function (err) {
-                // TODO
-                // user feedback within table header/footer
+                // TODO user feedback within table header/footer
                 console.error("Failed to load data from '" + t.props.restUrl + "': " + err);
             });
         }
@@ -140,8 +140,7 @@ var DataTable = React.createClass({
 
     constructColumns: function() {
         var t = this;
-        // TODO
-        // support custom fields in the description
+        // TODO support custom fields in the description
         t._columns = [];
         var content;
         Object.keys(t.props.columnFormats).forEach(function(columnId) {
@@ -212,7 +211,7 @@ var DataTable = React.createClass({
 
     render: function() {
         var refreshButton;
-        if (this._showRefreshButton) {
+        if (!!this.props.restUrl) {
             refreshButton = <Button text={'Refresh'} onClick={this.refresh} />;
         }
         return (
