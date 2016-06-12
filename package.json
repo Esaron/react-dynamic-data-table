@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "mkdir build; browserify -t [ babelify --presets [ react ] ] src/js/link-demo.js -o build/app.js;",
-    "resolve": "npm install --save react@0.14.8 react-dom@0.14.8 babelify babel-preset-react fixed-data-table jquery"
+    "resolve": "npm install --save react@0.14.8 react-dom@0.14.8 babelify babel-preset-react fixed-data-table jquery",
+    "run": "python -m SimpleHTTPServer"
   },
   "author": "esaron",
   "license": "ISC",

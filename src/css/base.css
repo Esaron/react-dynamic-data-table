@@ -16,3 +16,30 @@
 .linkLabel:hover {
     text-decoration: underline;
 }
+
+.dataTableFooter {
+    width: 100%;
+}
+
+.paginationWrapper {
+    display: inline-block;
+    width: 59%;
+}
+
+.rowsPerPage {
+    display: inline-block;
+    width: 50%;
+    text-align: left;
+}
+
+.pageControls {
+    display: inline-block;
+    width: 50%;
+    text-align: right;
+}
+
+.refreshWrapper {
+    display: inline-block;
+    width: 41%;
+    text-align: right;
+}
