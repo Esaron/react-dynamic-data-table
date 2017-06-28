@@ -1,38 +1,31 @@
 {
-  "name": "react-scratch",
-  "version": "1.0.0",
-  "description": "React playground",
-  "main": "src/js/link-demo.js",
+  "name": "esaron-react-dynamic-data-table",
+  "version": "8.0.1",
+  "description": "Dynamic data table wrapping fixed-data-table.",
+  "main": "dist/js/react-dynamic-data-table.min.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "mkdir build; browserify -t [ babelify --presets [ react ] ] src/js/link-demo.js -o build/app.js;",
-    "resolve": "npm install --save react@0.14.8 react-dom@0.14.8 babelify babel-preset-react fixed-data-table jquery",
-    "run": "python -m SimpleHTTPServer"
+    "build-dev": "babel src --out-dir dist --copy-files",
+    "build-min": "npm run build-dev && uglifyjs -c -o ./dist/js/react-dynamic-data-table.min.js ./dist/js/react-dynamic-data-table.js",
+    "prepublish": "npm run build-min",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "esaron",
-  "license": "ISC",
+  "license": "UNLICENSED",
   "dependencies": {
-    "babel-preset-react": "^6.5.0",
-    "babelify": "^7.3.0",
+    "esaron-react-link": "1.0.0",
+    "esaron-react-rest-combobox": "4.0.1",
     "fixed-data-table": "^0.6.0",
-    "jquery": "^2.2.4",
-    "react": "^0.14.8",
-    "react-dom": "^0.14.8"
+    "jquery": "^3.2.1",
+    "react": "^15.1.0",
+    "react-bootstrap": "^0.30.0",
+    "react-datepicker": "^0.29.0",
+    "react-dom": "^15.1.0"
   },
   "devDependencies": {
-    "babel-preset-react": "^6.5.0",
-    "babelify": "^7.3.0",
-    "fixed-data-table": "^0.6.0",
-    "jquery": "^2.2.4",
-    "react": "^0.14.8",
-    "react-dom": "^0.14.8"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Esaron/react-scratch.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Esaron/react-scratch/issues"
-  },
-  "homepage": "https://github.com/Esaron/react-scratch#readme"
+    "babel-cli": "^6.11.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-2": "^6.11.0",
+    "uglify": "^0.1.5"
+  }
 }

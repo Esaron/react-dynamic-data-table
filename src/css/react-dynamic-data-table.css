@@ -1,0 +1,324 @@
+@import '~fixed-data-table/dist/fixed-data-table.min.css';
+@import '~react-datepicker/dist/react-datepicker.min.css';
+@import '~esaron-react-link/dist/css/react-link.css';
+@import '~esaron-react-rest-combobox/dist/css/react-rest-combobox.css';
+
+/* Fixed Data Table Overrides */
+/* We have to use the important keyword here because Fixed Data Table is programmatically setting the style */
+.dataTablePreload .fixedDataTable_bodyRow .fixedDataTableCellLayout_main,
+.dataTablePreload .public_fixedDataTable_bodyRow .public_fixedDataTableCell_main {
+    width: auto !important;
+}
+
+.dataTablePreload .fixedDataTableCellLayout_wrap2,
+.dataTablePreload .public_fixedDataTableCellLayout_wrap2 {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.dataTablePreload .fixedDataTableCellLayout_wrap3,
+.dataTablePreload .public_fixedDataTableCell_wrap3 {
+    display: inline-block;
+}
+
+.public_fixedDataTable_header,
+.public_fixedDataTable_header .public_fixedDataTableCell_main,
+.public_fixedDataTable_header .fixedDataTableCellGroupLayout_cellGroup .public_fixedDataTableCell_main {
+    background-color: #bad8af;
+    background-image: -webkit-linear-gradient(#fff, #bad8af);
+    background-image: linear-gradient(#fff, #bad8af);
+}
+
+.public_fixedDataTableCell_main {
+    background-color: #fff;
+    border-color: #d3d3d3;
+}
+
+.public_fixedDataTableRow_highlighted,
+.public_fixedDataTableRow_highlighted .public_fixedDataTableCell_main {
+    background-color: #eaefe8;
+}
+
+/* Seems counter-intuitive to use border: none; on a class containing "hasBottomBorder", but
+   we don't want the border and this doesn't affect the rest of the layout. */
+.public_fixedDataTableLayout_header,
+.public_fixedDataTableLayout_hasBottomBorder {
+    border: none;
+}
+
+/* Minimalist Styling */
+
+/* Highlight on hover */
+div.hoverHighlight .public_fixedDataTableRow_main:hover .public_fixedDataTableCell_main,
+div.hoverHighlight .public_fixedDataTableRow_main:hover .public_fixedDataTableRow_highlighted,
+div.hoverHighlight .public_fixedDataTableRow_main:hover .public_fixedDataTableCell_main {
+    background-color: #eaefe8;
+}
+
+/* No borders */
+div.minimalistTable .public_fixedDataTableCell_main {
+    background-color: #fff;
+    border: none;
+}
+
+/* Leave header borders */
+div.minimalistTable .public_fixedDataTable_header .public_fixedDataTableCell_main {
+    border-right: 1px solid #d3d3d3
+}
+
+/* No swimlanes */
+div.minimalistTable .public_fixedDataTableRow_highlighted,
+div.minimalistTable .public_fixedDataTableRow_highlighted .public_fixedDataTableCell_main {
+    background-color: #fff;
+}
+
+/* Custom CSS */
+
+.dataTable {/* This class is for custom table styling via hierarchy. */}
+
+.dataTableFooter {
+    width: 100%;
+}
+
+.paginationWrapper {
+    display: inline-block;
+    width: 70%;
+}
+
+.rowsPerPage {
+    display: inline-block;
+    width: 44%;
+    text-align: left;
+}
+
+.pageControls {
+    display: inline-block;
+    width: 56%;
+    text-align: center;
+    position: relative;
+}
+
+.operationsWrapper {
+    display: inline-block;
+    width: 30%;
+    text-align: right;
+}
+
+.public_fixedDataTable_header a.sortHeader {
+    display: table;
+    vertical-align: middle;
+    padding: 8px;
+}
+
+a.link {
+    color: #4183c4;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.block {
+    display: block;
+}
+
+.fullBlock {
+    display: block;
+    width: 100%;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Custom Icons */
+
+.firstPageIcon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("../images/chevron-double-left-default.svg");
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.firstPageIcon:hover {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("../images/chevron-double-left-hover.svg");
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.previousPageIcon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("../images/chevron-left-default.svg");
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.previousPageIcon:hover {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("../images/chevron-left-hover.svg");
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.nextPageIcon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("../images/chevron-right-default.svg");
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.nextPageIcon:hover {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("../images/chevron-right-hover.svg");
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.lastPageIcon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("../images/chevron-double-right-default.svg");
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.lastPageIcon:hover {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("../images/chevron-double-right-hover.svg");
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.reloadIcon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("../images/reload-default.svg");
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.reloadIcon:hover {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("../images/reload-hover.svg");
+    background-size: 16px;
+    cursor: pointer;
+}
+
+/* Custom animations */
+
+/* Usage (EG infinite rotation on hover):
+    .class {
+        -moz-transition: all 1s ease;
+        -webkit-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .class:hover {
+        -webkit-animation: rotating 2s linear infinite;
+        -moz-animation: rotating 2s linear infinite;
+        -ms-animation: rotating 2s linear infinite;
+        animation: rotating 2s linear infinite;
+    }
+*/
+@keyframes rotating {
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes rotating {
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@-moz-keyframes rotating {
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@-ms-keyframes rotating {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("../images/loading-default.svg");
+    background-size: 16px;
+    -webkit-animation: rotating 2s linear infinite;
+    -moz-animation: rotating 2s linear infinite;
+    -ms-animation: rotating 2s linear infinite;
+    animation: rotating 2s linear infinite;
+}
+
+.dataTablePreload div.preLoadCell {
+    width: 100%;
+    height: 100%;
+    display: table;
+    text-align: center;
+}
+
+.dataTable .date-range-filter .form-control {
+    display: inline-block;
+    width: auto;
+}
