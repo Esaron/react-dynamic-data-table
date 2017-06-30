@@ -144,7 +144,7 @@ const DatePicker = require('react-datepicker');
 const Link = require('esaron-react-link');
 const RestCombobox = require('esaron-react-rest-combobox');
 
-var PaginationControls = React.createClass({
+const PaginationControls = React.createClass({
     getInitialState: function() {
         return {
             pageNumber: this.props.initialPageNumber,
@@ -169,7 +169,7 @@ var PaginationControls = React.createClass({
     },
 
     getInitialOptions: function() {
-        var options = [];
+        let options = [];
         this.props.rowsPerPageOptions.forEach(function (rowsPerPage) {
             options.push(<option key={rowsPerPage} value={rowsPerPage}>{rowsPerPage}</option>);
         });
@@ -177,14 +177,14 @@ var PaginationControls = React.createClass({
     },
 
     render: function() {
-        var t = this;
+        let t = this;
         return (
             <div>
                 <div className="rowsPerPage">
                     <select
                         value={this.state.rowsPerPage}
                         onChange={function(event) {
-                            var value = Number(event.target.value);
+                            let value = Number(event.target.value);
                             t.setState({rowsPerPage: value, pageNumber: 1});
                             t.props.onRowsPerPageChange(value);
                     }}>
@@ -192,11 +192,11 @@ var PaginationControls = React.createClass({
                     </select>
                 </div>
                 <div className="pageControls">
-                    <Link id={t.props.id + "-first-page"} className="firstPageIcon" onClick={function(event) {
+                    <Link id={t.props.id + "-first-page"} className="firstPageIcon" onClick={function() {
                         t.setState({pageNumber: 1});
                         t.props.onGoFirst();
                     }} />
-                    <Link id={t.props.id + "-previous-page"} className="previousPageIcon" onClick={function(event) {
+                    <Link id={t.props.id + "-previous-page"} className="previousPageIcon" onClick={function() {
                         if (t.state.pageNumber > 1) {
                             t.setState({pageNumber: t.state.pageNumber - 1});
                         }
@@ -212,8 +212,8 @@ var PaginationControls = React.createClass({
                             type="text"
                             value={!t.state.blankDisplay ? t.state.pageNumber : ""}
                             onChange={function(event) {
-                                var display = event.target.value;
-                                var value = Number(display);
+                                let display = event.target.value;
+                                let value = Number(display);
                                 if (display === "") {
                                     t.setState({blankDisplay: true});
                                 }
@@ -225,13 +225,13 @@ var PaginationControls = React.createClass({
                         />
                     </form>
                     <span> / {!!t.props.totalPages ? t.props.totalPages : "?"} </span>
-                    <Link id={t.props.id + "-next-page"} className="nextPageIcon" onClick={function(event) {
+                    <Link id={t.props.id + "-next-page"} className="nextPageIcon" onClick={function() {
                         if (t.state.pageNumber < t.props.totalPages) {
                             t.setState({pageNumber: t.state.pageNumber + 1});
                         }
                         t.props.onGoNext();
                     }} />
-                    <Link id={t.props.id + "-last-page"} className="lastPageIcon" onClick={function(event) {
+                    <Link id={t.props.id + "-last-page"} className="lastPageIcon" onClick={function() {
                         if (!!t.props.totalPages) {
                             t.setState({pageNumber: t.props.totalPages});
                         }
@@ -243,7 +243,7 @@ var PaginationControls = React.createClass({
     }
 });
 
-var DynamicDataTable = React.createClass({
+const DynamicDataTable = React.createClass({
     _state: {},
 
     _data: [],
@@ -251,11 +251,10 @@ var DynamicDataTable = React.createClass({
     _columns: [],
 
     _onColumnResizeEndCallback: function(newColumnWidth, columnKey) {
-        var targetIdx = -1;
+        let targetIdx = -1;
         $.each(this._state.columnFormats, function(idx, columnFormat) {
             if (columnFormat.id === columnKey) {
                 targetIdx = idx;
-                return;
             }
         });
         this._state.columnFormats[targetIdx].width = newColumnWidth;
@@ -263,21 +262,20 @@ var DynamicDataTable = React.createClass({
     },
 
     _sort: function() {
-        var t = this;
-        var sortedData = t._data.slice();
+        let t = this;
+        let sortedData = t._data.slice();
 
-        var targetIdx = -1;
+        let targetIdx = -1;
         $.each(this._state.columnFormats, function(idx, columnFormat) {
             if (!columnFormat.sortField && columnFormat.id === t._state.sortField ||
                 columnFormat.sortField === t._state.sortField) {
                 targetIdx = idx;
-                return;
             }
         });
         sortedData.sort(function(a, b) {
-            var sortFieldA = a[t._state.sortField] || "";
-            var sortFieldB = b[t._state.sortField] || "";
-            var columnFormat = t._state.columnFormats[targetIdx];
+            let sortFieldA = a[t._state.sortField] || "";
+            let sortFieldB = b[t._state.sortField] || "";
+            let columnFormat = t._state.columnFormats[targetIdx];
             if (!!columnFormat.sortFcn) {
                 return columnFormat.sortFcn(sortFieldA, sortFieldB, t._state.sortDir);
             }
@@ -329,16 +327,56 @@ var DynamicDataTable = React.createClass({
         this.refresh(!this._state.serverSideOperations);
     },
 
+    propTypes: {
+        errorMsg: PropTypes.string,
+        formatSubmitData: PropTypes.func,
+        initialColumnFormats: PropTypes.arrayOf(PropTypes.object).isRequired,
+        // initialData is expected to be an array, but jquery returns a psuedo-array, so we need to allow
+        // for objects too
+        initialData: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
+        initialFilterValue: PropTypes.string,
+        initialPage: PropTypes.number,
+        initialRowsPerPage: PropTypes.number,
+        initialSortDir: PropTypes.string,
+        initialSortField: PropTypes.string,
+        restParams: PropTypes.object,
+        restUrl: PropTypes.string,
+        submitUrl: PropTypes.string,
+        useScrolling: PropTypes.bool
+    },
+
+    getDefaultProps: function() {
+        return {
+            initialData: [],
+            initialPage: 1,
+            initialRowsPerPage: 10,
+            rowsPerPageOptions: [10, 25, 50],
+            serverSideOperations: false,
+            sortFcn: function(a, b, sortDir) {
+                let comparison = a.toLowerCase().localeCompare(b.toLowerCase());
+                if (comparison === 0) {
+                    comparison = a.localeCompare(b);
+                }
+                if (sortDir === 'desc') {
+                    comparison = -comparison;
+                }
+                return comparison;
+            },
+            isColumnResizing: false,
+            sortable: true
+        };
+    },
+
     getInitialState: function() {
-        var t = this;
-        var totalRecords;
-        var totalPages;
+        let t = this;
+        let totalRecords;
+        let totalPages;
         if (!t.restUrl && t.props.initialData.length > 0) {
             totalRecords = t.props.initialData.length;
             totalPages = t.calculateTotalPages(totalRecords, t.props.initialRowsPerPage);
             t._data = t.props.initialData;
         }
-        var filters = {};
+        let filters = {};
         $.each(t.props.initialColumnFormats, function(idx, columnFormat) {
             filters[columnFormat.id] = columnFormat.initialFilterValue;
         });
@@ -348,7 +386,6 @@ var DynamicDataTable = React.createClass({
             totalPages: totalPages,
             pageNumber: t.props.initialPage,
             sortField: t.props.initialSortField,
-            filters: {},
             columnFormats: t.props.initialColumnFormats,
             sortDir: t.props.initialSortDir,
             headerHeight: t.props.headerHeight,
@@ -356,8 +393,8 @@ var DynamicDataTable = React.createClass({
             loading: false,
             error: false,
             onSubmit: function() {
-                var deferred = $.Deferred();
-                var submitData = t._data;
+                let deferred = $.Deferred();
+                let submitData = t._data;
                 if (!!t.props.formatSubmitData) {
                     submitData = t.props.formatSubmitData(t._data);
                 }
@@ -396,39 +433,6 @@ var DynamicDataTable = React.createClass({
         return t._state;
     },
 
-    getDefaultProps: function() {
-        return {
-            initialData: [],
-            initialPage: 1,
-            initialRowsPerPage: 10,
-            rowsPerPageOptions: [10, 25, 50],
-            serverSideOperations: false,
-            sortFcn: function(a, b, sortDir) {
-                var comparison = a.toLowerCase().localeCompare(b.toLowerCase());
-                if (comparison === 0) {
-                    comparison = a.localeCompare(b);
-                }
-                if (sortDir === 'desc') {
-                    comparison = -comparison;
-                }
-                return comparison;
-            },
-            isColumnResizing: false,
-            sortable: true
-        };
-    },
-
-    propTypes: {
-        // initialData is expected to be an array, but jquery returns a psuedo-array, so we need to allow
-        // for objects too
-        initialData: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
-        restUrl: PropTypes.string,
-        restParams: PropTypes.object,
-        initialColumnFormats: PropTypes.arrayOf(PropTypes.object).isRequired,
-        initialRowsPerPage: PropTypes.number,
-        initialPage: PropTypes.number
-    },
-
     getInitialDimensions: function() {
         return {
             width: this.props.width || 0,
@@ -437,15 +441,15 @@ var DynamicDataTable = React.createClass({
     },
 
     resetDimensions: function() {
-        var dimensions = this.getInitialDimensions();
+        let dimensions = this.getInitialDimensions();
         this._state.width = dimensions.width;
         this._state.height = dimensions.height;
     },
 
     loadData: function() {
-        var t = this;
-        var deferred = $.Deferred();
-        var params = t.props.restParams;
+        let t = this;
+        let deferred = $.Deferred();
+        let params = t.props.restParams;
         if (t.props.serverSideOperations && !t.props.useScrolling) {
             params.pageNumber = t._state.pageNumber;
             params.rowsPerPage = t._state.rowsPerPage;
@@ -455,12 +459,13 @@ var DynamicDataTable = React.createClass({
         }
         t.currentRequest = $.get(t.props.restUrl, params);
         t.currentRequest.done(function(response) {
-            var data = JSON.parse(response);
-            if (data instanceof Array) {
+            let data = JSON.parse(response);
+            if (Array.isArray(data)) {
                 t._data = data;
             }
             else {
-                t._data = data.records;
+                // Payload is expected to have a 'records' key with the data array.
+                t._data = data["records"];
                 t._state.totalRecords = data.totalRecords;
                 if (!t.props.useScrolling) {
                     t._state.totalPages = t.calculateTotalPages();
@@ -484,15 +489,15 @@ var DynamicDataTable = React.createClass({
     },
 
     getPageData: function() {
-        var t = this;
-        var data = t._data;
+        let t = this;
+        let data = t._data;
         if (!!t._state.sortDir && !!t._state.sortField) {
             data = t._sort();
         }
         $.each(t._state.filters, function(columnId, filterValue) {
             if (!!filterValue) {
                 let filterFcn;
-                if (!!Array.isArray(filterValue)) {
+                if (Array.isArray(filterValue)) {
                     // It's a date range. We assume the filter values are Moments
                     let from = filterValue[0].valueOf();
                     let to = filterValue[1].valueOf();
@@ -525,12 +530,10 @@ var DynamicDataTable = React.createClass({
                 data = data.filter(filterFcn);
             }
         });
-        var startIdx;
-        var endIdx;
         // If we are paginating client-side, slice the data appropriately
         if (!t.props.serverSideOperations && !t.props.useScrolling) {
-            startIdx = (t._state.pageNumber - 1) * t._state.rowsPerPage;
-            endIdx = startIdx + t._state.rowsPerPage;
+            let startIdx = (t._state.pageNumber - 1) * t._state.rowsPerPage;
+            let endIdx = startIdx + t._state.rowsPerPage;
             data = data.slice(startIdx, endIdx);
         }
         return data;
@@ -559,16 +562,16 @@ var DynamicDataTable = React.createClass({
     },
 
     goToPage: function(pageNumber) {
-        var t = this;
-        var previousPage;
-        var previousData;
+        let t = this;
+        let previousPage;
+        let previousData;
         if (pageNumber > 0 && (!t._state.totalPages ||
-                (pageNumber != t._state.pageNumber && pageNumber <= t._state.totalPages))) {
+                (pageNumber !== t._state.pageNumber && pageNumber <= t._state.totalPages))) {
             previousPage = t._state.pageNumber;
             previousData = t._state.data;
             t._state.pageNumber = pageNumber;
             $.when(t.refresh(!this._state.serverSideOperations)).then(
-                function(result) {
+                function() {
                     // If we've passed the record boundaries, jump back to the previous page
                     if (t._state.data.length === 0) {
                         t._state.pageNumber = previousPage;
@@ -600,7 +603,7 @@ var DynamicDataTable = React.createClass({
     },
 
     calculateBodyHeight: function() {
-        var rowCount = this.state.rowsPerPage;
+        let rowCount = this.state.rowsPerPage;
         if (this.state.data.length < this.state.rowsPerPage) {
             rowCount = this.state.data.length || 1;
         }
@@ -609,7 +612,7 @@ var DynamicDataTable = React.createClass({
 
     calculateHeight: function() {
         // The "+2" is 2px for styling from fdt for scroll shadows
-        var height = this.state.headerHeight + this.calculateBodyHeight() + 2;
+        let height = this.state.headerHeight + this.calculateBodyHeight() + 2;
         if (!!this.props.footerHeight) {
             height += this.props.footerHeight;
         }
@@ -617,21 +620,21 @@ var DynamicDataTable = React.createClass({
     },
 
     constructColumns: function() {
-        var t = this;
+        let t = this;
         t._columns = [];
         $.each(t._state.columnFormats, function(columnIndex, columnFormat) {
             // Cache the original header in the columnFormat for later usage
             if (!columnFormat.origHeader) {
                 columnFormat.origHeader = columnFormat.header;
             }
-            var columnId = columnFormat.id;
-            var columnFormatter = columnFormat.formatter;
-            var sortIcon = "";
+            let columnId = columnFormat.id;
+            let columnFormatter = columnFormat["formatter"];
+            let sortIcon = "";
             if (!t.props.width) {
                 t._state.width += columnFormat.width;
             }
-            var columnSortField = columnFormat.sortField || columnFormat.id;
-            var header = columnFormat.origHeader;
+            let columnSortField = columnFormat.sortField || columnFormat.id;
+            let header = columnFormat.origHeader;
             if (columnFormat.sortable) {
                 if (t._state.sortField === columnSortField) {
                     if (t._state.sortDir === "asc") {
@@ -647,16 +650,16 @@ var DynamicDataTable = React.createClass({
                     </a>
                 );
             }
-            if (!!columnFormat.filterType) {
+            if (!!columnFormat["filterType"]) {
                 if (t._state.headerHeight === t.props.headerHeight) {
                     // We have at least one filter, but the header height hasn't been updated to fit the inputs
                     t._state.headerHeight = t._state.headerHeight + 34;
                 }
-                var filter;
-                var handleChange = function(e) {
+                let filter;
+                let handleChange = function(e) {
                     t._setFilterValue(columnFormat.id, e.target.value);
                 };
-                if (columnFormat.filterType === 'text') {
+                if (columnFormat["filterType"] === 'text') {
                     filter = <FormControl
                         id={t.props.id + '-' + columnFormat.id + '-text'}
                         key={t.props.id + '-' + columnFormat.id + '-text'}
@@ -666,20 +669,20 @@ var DynamicDataTable = React.createClass({
                         onChange={handleChange}
                     />;
                 }
-                else if (columnFormat.filterType === 'select') {
+                else if (columnFormat["filterType"] === 'select') {
                     filter = <FormControl
                         id={t.props.id + '-' + columnFormat.id + '-select'}
                         key={t.props.id + '-' + columnFormat.id + '-select'}
                         componentClass="select"
                         onChange={handleChange}
                     >
-                        <option value=""></option>
-                        {columnFormat.filterOptions.map(function(option) {
+                        <option value="" />
+                        {columnFormat["filterOptions"].map(function(option) {
                             return <option key={option.value} value={option.value}>{option.label}</option>;
                         })}
                     </FormControl>;
                 }
-                else if (columnFormat.filterType === 'combobox') {
+                else if (columnFormat["filterType"] === 'combobox') {
                     filter = <RestCombobox
                         id={t.props.id + '-' + columnFormat.id + '-combobox'}
                         key={t.props.id + '-' + columnFormat.id + '-combobox'}
@@ -690,16 +693,16 @@ var DynamicDataTable = React.createClass({
                             t._setFilterValue(columnFormat.id, value);
                         }}
                         initialValue={t._state.filters[columnFormat.id]}
-                        restUrl={columnFormat.filterRestUrl}
+                        restUrl={columnFormat["filterRestUrl"]}
                         queryFcn={columnFormat.queryFcn}
                         formatFcn={function(value) {
                             let data = {};
                             data[columnFormat.id] = value;
-                            return columnFormat.formatter(data, t);
+                            return columnFormat["formatter"](data, t);
                         }}
                     />;
                 }
-                else if (columnFormat.filterType === 'date') {
+                else if (columnFormat["filterType"] === 'date') {
                     filter = <DatePicker
                         id={t.props.id + '-' + columnFormat.id + '-date'}
                         key={t.props.id + '-' + columnFormat.id + '-date'}
@@ -712,7 +715,7 @@ var DynamicDataTable = React.createClass({
                         selected={t._state.filters[columnFormat.id]}
                     />;
                 }
-                else if (columnFormat.filterType === 'daterange') {
+                else if (columnFormat["filterType"] === 'daterange') {
                     filter = (
                         <div className='daterange-filter'>
                             <DatePicker
@@ -781,8 +784,8 @@ var DynamicDataTable = React.createClass({
                         }
                         else {
                             className = "dataCell";
-                            if (!!columnFormat.cellClass) {
-                                className = className + " " + columnFormat.cellClass;
+                            if (!!columnFormat["cellClass"]) {
+                                className = className + " " + columnFormat["cellClass"];
                             }
                             if (!!columnFormatter) {
                                 content = columnFormatter(t._state.data[cellData.rowIndex], t);
@@ -790,13 +793,13 @@ var DynamicDataTable = React.createClass({
                             else {
                                 content = t._state.data[cellData.rowIndex][columnId];
                             }
-                            if (!!columnFormat.editable) {
+                            if (!!columnFormat["editable"]) {
                                 content = <input
                                             type="text"
                                             id={columnId + cellData.rowIndex}
                                             value={content}
                                             onChange={function(event) {
-                                                var value = event.target.value;
+                                                let value = event.target.value;
                                                 this.setState({value: value});
                                                 t._state.data[cellData.rowIndex][columnId] = value;
                                             }}
@@ -822,8 +825,8 @@ var DynamicDataTable = React.createClass({
     },
 
     refresh: function(skipReload) {
-        var t = this;
-        var deferred = $.Deferred();
+        let t = this;
+        let deferred = $.Deferred();
         if (!skipReload && !!t.props.restUrl) {
             t._state.loading = true;
             t._state.error = false;
@@ -833,7 +836,7 @@ var DynamicDataTable = React.createClass({
                     t.constructPage();
                     deferred.resolve(result);
                 }, function(err) {
-                    var aborted = err.statusText === 'abort';
+                    let aborted = err.statusText === 'abort';
                     // We don't count this as an error if we're aborting the request
                     t._state.loading = aborted;
                     t._state.error = !aborted;
@@ -859,14 +862,14 @@ var DynamicDataTable = React.createClass({
     },
 
     render: function() {
-        var t = this;
-        var refreshButton;
-        var submitButton;
-        var pageNav;
-        var dimensions = {};
+        let t = this;
+        let refreshButton;
+        let submitButton;
+        let pageNav;
+        let dimensions = {};
         if (!!t.props.restUrl) {
             refreshButton =
-                <Link id={t.props.id + "-refresh"} className="reloadIcon" tooltip="Refresh table" onClick={function(event) {
+                <Link id={t.props.id + "-refresh"} className="reloadIcon" tooltip="Refresh table" onClick={function() {
                     t.refresh();
                 }} />;
         }
@@ -896,19 +899,20 @@ var DynamicDataTable = React.createClass({
         if (!t.props.height) {
             dimensions.height = t.calculateHeight() || 0;
         }
-        var {headerHeight, rowHeight, ...childProps} = t.props;
-        var rowsCount = t.state.data.length;
-        var className = "dataTable " + t.props.className;
+        let {headerHeight, rowHeight, ...childProps} = t.props;
+        let rowsCount = t.state.data.length;
+        let className = "dataTable " + t.props.className;
         if (t.state.loading || t.state.error) {
             rowHeight = t.calculateBodyHeight();
             rowsCount = 1;
             className += " dataTablePreload";
         }
         return (
-            <div id={t.props.id} className={className} style={{'width': dimensions.width, 'height': dimensions.height + 20}}>
+            <div id={t.props.id} className={className}
+                 style={{'width': dimensions.width, 'height': dimensions.height + 20}}>
                 <Table rowsCount={rowsCount}
                        onColumnResizeEndCallback={t._onColumnResizeEndCallback}
-                       headerHeight={t.state.headerHeight}
+                       headerHeight={t.state.headerHeight || headerHeight}
                        rowHeight={rowHeight}
                        {...dimensions}
                        {...childProps}>
