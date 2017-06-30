@@ -603,11 +603,7 @@ const DynamicDataTable = React.createClass({
     },
 
     calculateBodyHeight: function() {
-        let rowCount = this.state.rowsPerPage;
-        if (this.state.data.length < this.state.rowsPerPage) {
-            rowCount = this.state.data.length || 1;
-        }
-        return this.props.rowHeight * rowCount;
+        return this.props.rowHeight * this.state.rowsPerPage;
     },
 
     calculateHeight: function() {
@@ -901,7 +897,10 @@ const DynamicDataTable = React.createClass({
         }
         let {headerHeight, rowHeight, ...childProps} = t.props;
         let rowsCount = t.state.data.length;
-        let className = "dataTable " + t.props.className;
+        let className = "dataTable";
+        if (!!t.props.className) {
+            className += " " + t.props.className;
+        }
         if (t.state.loading || t.state.error) {
             rowHeight = t.calculateBodyHeight();
             rowsCount = 1;

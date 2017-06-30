@@ -9,6 +9,7 @@ const DynamicDataTable = require('../dist/js/react-dynamic-data-table.js'),
     id = "table-demo";
 
 ReactDOM.render(React.createElement(DynamicDataTable, {
+    className: "hoverHighlight",
     headerHeight: 40,
     id: id,
     initialColumnFormats: [{

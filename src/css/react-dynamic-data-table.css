@@ -21,7 +21,7 @@
     display: inline-block;
 }
 
-.public_fixedDataTable_header,
+/*.public_fixedDataTable_header,
 .public_fixedDataTable_header .public_fixedDataTableCell_main,
 .public_fixedDataTable_header .fixedDataTableCellGroupLayout_cellGroup .public_fixedDataTableCell_main {
     background-color: #bad8af;
@@ -37,38 +37,34 @@
 .public_fixedDataTableRow_highlighted,
 .public_fixedDataTableRow_highlighted .public_fixedDataTableCell_main {
     background-color: #eaefe8;
-}
+}*/
 
 /* Seems counter-intuitive to use border: none; on a class containing "hasBottomBorder", but
    we don't want the border and this doesn't affect the rest of the layout. */
-.public_fixedDataTableLayout_header,
-.public_fixedDataTableLayout_hasBottomBorder {
+.fixedDataTableRowLayout_rowWrapper .public_fixedDataTable_hasBottomBorder {
     border: none;
 }
-
-/* Minimalist Styling */
 
 /* Highlight on hover */
 div.hoverHighlight .public_fixedDataTableRow_main:hover .public_fixedDataTableCell_main,
 div.hoverHighlight .public_fixedDataTableRow_main:hover .public_fixedDataTableRow_highlighted,
 div.hoverHighlight .public_fixedDataTableRow_main:hover .public_fixedDataTableCell_main {
-    background-color: #eaefe8;
+    background-color: #dfdfdf;
 }
 
 /* No borders */
-div.minimalistTable .public_fixedDataTableCell_main {
-    background-color: #fff;
+div.dataTable .public_fixedDataTableCell_main {
     border: none;
 }
 
 /* Leave header borders */
-div.minimalistTable .public_fixedDataTable_header .public_fixedDataTableCell_main {
+div.dataTable .public_fixedDataTable_header .public_fixedDataTableCell_main {
     border-right: 1px solid #d3d3d3
 }
 
 /* No swimlanes */
-div.minimalistTable .public_fixedDataTableRow_highlighted,
-div.minimalistTable .public_fixedDataTableRow_highlighted .public_fixedDataTableCell_main {
+div.noSwimlanes .public_fixedDataTableRow_highlighted,
+div.noSwimlanes .public_fixedDataTableRow_highlighted .public_fixedDataTableCell_main {
     background-color: #fff;
 }
 
