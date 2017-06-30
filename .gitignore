@@ -9,12 +9,9 @@
 *.bak
 *~
 
-# ignore .iml files for IDEA
-*.iml
-/.idea
-
 # ignore compilation related directories in the root of the project
 /build
+/demo/build
 /dist
 /lib
 
