@@ -459,7 +459,12 @@ const DynamicDataTable = React.createClass({
         }
         t.currentRequest = $.get(t.props.restUrl, params);
         t.currentRequest.done(function(response) {
-            let data = JSON.parse(response);
+            let data;
+            if (typeof response === 'object') {
+                data = response;
+            } else {
+                data = JSON.parse(response);
+            }
             if (Array.isArray(data)) {
                 t._data = data;
             }
