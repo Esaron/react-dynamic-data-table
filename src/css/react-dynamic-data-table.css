@@ -303,7 +303,6 @@ a.link {
     background-size: 16px;
     -webkit-animation: rotating 2s linear infinite;
     -moz-animation: rotating 2s linear infinite;
-    -ms-animation: rotating 2s linear infinite;
     animation: rotating 2s linear infinite;
 }
 

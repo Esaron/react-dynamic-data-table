@@ -1,6 +1,6 @@
 {
   "name": "esaron-react-dynamic-data-table",
-  "version": "8.0.2",
+  "version": "8.0.5",
   "description": "Dynamic data table wrapping fixed-data-table.",
   "main": "dist/js/react-dynamic-data-table.min.js",
   "scripts": {
